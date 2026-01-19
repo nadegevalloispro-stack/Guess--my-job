@@ -457,6 +457,7 @@
     let answered = false;
     let total = 0;
     let correct = 0;
+          let shownJobs = [];
 
     const descriptionEl = document.getElementById("job-description");
     const difficultyEl = document.getElementById("difficulty-pill");
@@ -505,11 +506,26 @@
     }
 
     function pickRandomJob() {
-      const index = Math.floor(Math.random() * jobs.length);
-      currentJob = jobs[index];
-      answered = false;
-      renderJob(currentJob);
-    }
+      // If all jobs have been shown, reset the list
+        if (shownJobs.length === jobs.length) {
+          shownJobs = [];
+        }
+        
+        // Get available jobs (not yet shown)
+        const availableJobs = jobs.filter((job, idx) => !shownJobs.includes(idx));
+        
+        // Pick a random job from available ones
+        const randomIndex = Math.floor(Math.random() * availableJobs.length);
+        const selectedJob = availableJobs[randomIndex];
+        
+        // Find the original index and mark it as shown
+        const originalIndex = jobs.indexOf(selectedJob);
+        shownJobs.push(originalIndex);
+        
+        currentJob = selectedJob;
+        answered = false;
+        renderJob(currentJob);
+      }
 
     function handleOptionClick(index, btn) {
       if (!currentJob || answered) return;
