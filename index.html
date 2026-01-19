@@ -1,575 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Guess my Job – Career Ladder</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --accent: #f97316;
-      --accent-soft: #fed7aa;
-      --accent-2: #22c55e;
-      --accent-3: #3b82f6;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --wrong: #ef4444;
-    }
+    <meta charset="UTF-8" />
+    <title>Guess my Job - Career Ladder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --bg: #8f7f9a;
+            --card: #1e293b;
+            --accent: #f97316;
+            --accent-soft: #fed7aa;
+            --accent-2: #22c55e;
+            --accent-3: #3b82f6;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --wrong: #ef4444;
+        }
 
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at top, #1d4ed8 0, #020617 55%);
-      color: var(--text);
-    }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, #1d4ed8 0, #0d2617 55%);
+            color: var(--text);
+        }
 
-    .app {
-      width: 100%;
-      max-width: 900px;
-      padding: 24px;
-    }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+        }
 
-    .card {
-      background: linear-gradient(135deg, #020617 0, #0f172a 40%, #111827 100%);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
 
-    /* Ladder visual */
-    .ladder {
-      position: absolute;
-      right: -40px;
-      bottom: -40px;
-      width: 220px;
-      height: 220px;
-      opacity: 0.14;
-      background-image:
-        linear-gradient(to right, rgba(248, 250, 252, 0.9) 6px, transparent 6px),
-        linear-gradient(to bottom, rgba(248, 250, 252, 0.9) 6px, transparent 6px);
-      background-size: 70px 100%, 100% 40px;
-      transform: rotate(-12deg);
-      pointer-events: none;
-    }
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    header {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 16px;
-    }
+        .subtitle {
+            color: var(--muted);
+            margin: 0 0 24px 0;
+            font-size: 14px;
+        }
 
-    .badge {
-      background: rgba(248, 250, 252, 0.1);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--accent-soft);
-      border: 1px solid rgba(248, 250, 252, 0.2);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
+        .score {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
 
-    .badge span {
-      display: inline-block;
-    }
+        .score-item {
+            text-align: center;
+        }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(24px, 4vw, 32px);
-      display: flex;
-      flex-direction: column;
-    }
+        .score-label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    h1 span:nth-child(1) {
-      font-weight: 500;
-      font-size: 16px;
-      color: var(--muted);
-    }
+        .score-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
 
-    h1 span:nth-child(2) {
-      font-weight: 800;
-      letter-spacing: 0.03em;
-    }
+        .job-display {
+            background: linear-gradient(135deg, var(--accent-3) 0%, var(--accent-2) 100%);
+            padding: 32px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 24px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    h1 span:nth-child(3) {
-      font-weight: 600;
-      font-size: 18px;
-      color: var(--accent-soft);
-    }
+        .job-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
 
-    .subtitle {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 14px;
-    }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
-      gap: 20px;
-      margin-top: 12px;
-    }
+        .option-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            padding: 16px;
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
 
-    @media (max-width: 768px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
+        .option-btn:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: var(--accent-3);
+            transform: translateX(4px);
+        }
 
-    .description-box {
-      background: radial-gradient(circle at top left, #1d4ed8 0, #020617 60%);
-      border-radius: 18px;
-      padding: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
+        .option-btn.correct {
+            background: var(--accent-2);
+            border-color: var(--accent-2);
+        }
 
-    .description-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--accent-soft);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+        .option-btn.wrong {
+            background: var(--wrong);
+            border-color: var(--wrong);
+        }
 
-    .difficulty-pill {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(248, 250, 252, 0.25);
-      background: rgba(15, 23, 42, 0.5);
-    }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
 
-    .description-text {
-      font-size: 15px;
-      line-height: 1.5;
-      margin: 0;
-    }
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-    .level-tag {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--accent-soft);
-      display: inline-flex;
-      gap: 6px;
-      align-items: center;
-    }
+        .next-btn:hover {
+            background: #ea580c;
+            transform: scale(1.02);
+        }
 
-    .level-tag span.dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent-2);
-    }
+        .hidden {
+            display: none;
+        }
 
-    .controls {
-      margin-top: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
+        .game-over {
+            text-align: center;
+        }
 
-    .primary-button {
-      border: none;
-      outline: none;
-      cursor: pointer;
-      border-radius: 999px;
-      padding: 10px 20px;
-      font-weight: 600;
-      font-size: 14px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #f59e0b 0, #ec4899 40%, #3b82f6 100%);
-      color: #0f172a;
-      box-shadow: 0 12px 30px rgba(248, 250, 252, 0.28);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+        .final-score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 24px 0;
+        }
 
-    .primary-button span.icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      color: #f97316;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-    }
+        .message {
+            font-size: 18px;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
 
-    .secondary-button {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 8px 14px;
-      font-size: 13px;
-      background: rgba(15, 23, 42, 0.7);
-      color: var(--muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-    }
+        .restart-btn {
+            padding: 16px 32px;
+            background: var(--accent-3);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-    .secondary-button span.dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #22c55e;
-    }
-
-    .options {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .option {
-      border-radius: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      padding: 10px 12px;
-      background: rgba(15, 23, 42, 0.85);
-      color: var(--text);
-      cursor: pointer;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      transition: all 0.12s ease;
-    }
-
-    .option:hover {
-      border-color: var(--accent-3);
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
-      transform: translateY(-1px);
-    }
-
-    .option.selected {
-      border-color: var(--accent-3);
-      background: rgba(37, 99, 235, 0.25);
-    }
-
-    .option.correct {
-      border-color: #22c55e;
-      background: rgba(34, 197, 94, 0.15);
-    }
-
-    .option.wrong {
-      border-color: #ef4444;
-      background: rgba(239, 68, 68, 0.15);
-    }
-
-    .option-key {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-right: 10px;
-    }
-
-    .feedback {
-      margin-top: 8px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 22px;
-    }
-
-    .feedback.correct {
-      color: #bbf7d0;
-    }
-
-    .feedback.wrong {
-      color: #fecaca;
-    }
-
-    .feedback span.pi {
-      font-size: 16px;
-    }
-
-    .sidebar {
-      background: rgba(15, 23, 42, 0.85);
-      border-radius: 18px;
-      padding: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .sidebar h2 {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-      color: var(--accent-soft);
-    }
-
-    .sidebar ul {
-      padding-left: 18px;
-      margin: 4px 0 0 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 4px;
-    }
-  </style>
+        .restart-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <div class="card">
-      <div class="ladder"></div>
+    <div class="container">
+        <div class="card">
+            <div id="game-screen">
+                <h1>🎯 Guess my Job</h1>
+                <p class="subtitle">Career Ladder Challenge</p>
+                
+                <div class="score">
+                    <div class="score-item">
+                        <div class="score-label">Score</div>
+                        <div class="score-value" id="score">0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Question</div>
+                        <div class="score-value"><span id="current-q">1</span>/<span id="total-q">10</span></div>
+                    </div>
+                </div>
 
-      <header>
-        <div class="badge">
-          <span>🪜</span>
-          <span>Career Ladder</span>
-        </div>
-        <div>
-          <h1>
-            <span>Classroom warm-up</span>
-            <span>Guess my Job</span>
-            <span>Read the clues. Pick the title.</span>
-          </h1>
-          <div class="subtitle">Tech / SaaS roles from SDR to C‑suite.</div>
-        </div>
-      </header>
+                <div class="job-display">
+                    <div class="job-title" id="job-title">Loading...</div>
+                </div>
 
-      <div class="layout">
-        <div>
-          <div class="description-box">
-            <div class="description-label">
-              <span>Description</span>
-              <span class="difficulty-pill" id="difficulty-pill">Level: Easy</span>
-            </div>
-            <p class="description-text" id="job-description">
-              Click “New Job” to start the game.
-            </p>
-            <div class="level-tag">
-              <span class="dot"></span>
-              <span id="level-tag-text">Warm-up question</span>
+                <div class="options" id="options">
+                    <!-- Options will be inserted here -->
+                </div>
+
+                <button class="next-btn hidden" id="next-btn">Next Question →</button>
             </div>
 
-            <div class="controls">
-              <button class="primary-button" id="new-job-btn">
-                <span class="icon">▶</span>
-                New Job
-              </button>
-              <button class="secondary-button" id="reveal-btn">
-                <span class="dot"></span>
-                Reveal answer
-              </button>
-              <div style="font-size: 12px; color: var(--muted);" id="score-text">
-                Score: 0 / 0
-              </div>
+            <div id="game-over-screen" class="hidden game-over">
+                <h1>🎉 Game Over!</h1>
+                <div class="final-score" id="final-score">0/10</div>
+                <p class="message" id="final-message">Well done!</p>
+                <button class="restart-btn" onclick="location.reload()">Play Again</button>
             </div>
-
-            <div class="feedback" id="feedback"></div>
-          </div>
-
-          <div class="options" id="options-container">
-            <!-- options injected by JS -->
-          </div>
         </div>
-
-        <aside class="sidebar">
-          <h2>How it works</h2>
-          <ul>
-            <li>Click “New Job” to get a fresh description.</li>
-            <li>Students guess the job title out loud or in pairs.</li>
-            <li>Click an option to lock in a guess.</li>
-            <li>Use “Reveal answer” if nobody gets it.</li>
-          </ul>
-        </aside>
-      </div>
     </div>
-  </div>
 
-  <script>
-    const jobs = [
-      {
-        title: "Sales Development Representative (SDR)",
-        description:
-          "Prospects new leads, sends cold emails and LinkedIn messages, and books meetings for the sales team in a SaaS company.",
-        level: "Easy",
-        levelTag: "Entry-level revenue role",
-        options: [
-          "Sales Development Representative (SDR)",
-          "Chief Marketing Officer (CMO)",
-          "Customer Success Manager",
-          "Chief Technology Officer (CTO)"
-        ],
-        correctIndex: 0
-      },
-      {
-        title: "Customer Success Manager",
-        description:
-          "Onboards new clients, helps them get value from the product, and works to reduce churn and grow accounts.",
-        level: "Medium",
-        levelTag: "Post‑sale relationship role",
-        options: [
-          "Account Executive",
-          "Customer Success Manager",
-          "Product Manager",
-          "Chief Operating Officer (COO)"
-        ],
-        correctIndex: 1
-      },
-      {
-        title: "Chief Marketing Officer (CMO)",
-        description:
-          "Owns the go‑to‑market strategy, brand, and demand generation across all marketing channels for the company.",
-        level: "Hard",
-        levelTag: "C‑suite leadership role",
-        options: [
-          "Revenue Operations Manager",
-          "Chief Executive Officer (CEO)",
-          "Chief Marketing Officer (CMO)",
-          "Head of Sales Development"
-        ],
-        correctIndex: 2
-      }
-    ];
+    <script>
+        const jobs = [
+            "Software Engineer",
+            "Data Scientist",
+            "Product Manager",
+            "UX Designer",
+            "Marketing Manager",
+            "Sales Representative",
+            "Financial Analyst",
+            "Human Resources Manager",
+            "Nurse Practitioner",
+            "Teacher",
+            "Lawyer",
+            "Accountant",
+            "Graphic Designer",
+            "Civil Engineer",
+            "Pharmacist",
+            "Physical Therapist",
+            "Electrician",
+            "Plumber",
+            "Chef",
+            "Real Estate Agent",
+            "Architect",
+            "Dentist",
+            "Veterinarian",
+            "Photographer",
+            "Journalist",
+            "Social Media Manager",
+            "Web Developer",
+            "Business Analyst",
+            "Project Manager",
+            "Content Writer",
+            "SEO Specialist",
+            "Mechanical Engineer",
+            "Interior Designer",
+            "Flight Attendant",
+            "Police Officer",
+            "Firefighter",
+            "Paramedic",
+            "Psychologist",
+            "Nutritionist",
+            "Personal Trainer",
+            "Event Planner",
+            "Translator",
+            "Video Editor",
+            "Sound Engineer",
+            "Fashion Designer",
+            "Barista",
+            "Hairstylist",
+            "Construction Manager",
+            "Air Traffic Controller",
+            "Pilot"
+        ];
 
-    let currentJob = null;
-    let answered = false;
-    let total = 0;
-    let correct = 0;
-          let shownJobs = [];
+        let usedJobs = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let correctAnswer = "";
+        let answeredCurrentQuestion = false;
+        const totalQuestions = 10;
 
-    const descriptionEl = document.getElementById("job-description");
-    const difficultyEl = document.getElementById("difficulty-pill");
-    const levelTagEl = document.getElementById("level-tag-text");
-    const optionsContainer = document.getElementById("options-container");
-    const feedbackEl = document.getElementById("feedback");
-    const scoreTextEl = document.getElementById("score-text");
-    const newJobBtn = document.getElementById("new-job-btn");
-    const revealBtn = document.getElementById("reveal-btn");
-
-    function updateScoreText() {
-      scoreTextEl.textContent = `Score: ${correct} / ${total}`;
-    }
-
-    function clearFeedback() {
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-    }
-
-    function renderJob(job) {
-      descriptionEl.textContent = job.description;
-      difficultyEl.textContent = `Level: ${job.level}`;
-      levelTagEl.textContent = job.levelTag;
-      optionsContainer.innerHTML = "";
-      clearFeedback();
-
-      job.options.forEach((opt, index) => {
-        const btn = document.createElement("button");
-        btn.className = "option";
-        btn.dataset.index = index;
-
-        const keySpan = document.createElement("span");
-        keySpan.className = "option-key";
-        keySpan.textContent = String.fromCharCode(65 + index);
-
-        const labelSpan = document.createElement("span");
-        labelSpan.textContent = opt;
-
-        btn.appendChild(keySpan);
-        btn.appendChild(labelSpan);
-
-        btn.addEventListener("click", () => handleOptionClick(index, btn));
-
-        optionsContainer.appendChild(btn);
-      });
-    }
-
-    function pickRandomJob() {
-      // If all jobs have been shown, reset the list
-        if (shownJobs.length === jobs.length) {
-          shownJobs = [];
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
         }
-        
-        // Get available jobs (not yet shown)
-        const availableJobs = jobs.filter((job, idx) => !shownJobs.includes(idx));
-        
-        // Pick a random job from available ones
-        const randomIndex = Math.floor(Math.random() * availableJobs.length);
-        const selectedJob = availableJobs[randomIndex];
-        
-        // Find the original index and mark it as shown
-        const originalIndex = jobs.indexOf(selectedJob);
-        shownJobs.push(originalIndex);
-        
-        currentJob = selectedJob;
-        answered = false;
-        renderJob(currentJob);
-      }
 
-    function handleOptionClick(index, btn) {
-      if (!currentJob || answered) return;
-      answered = true;
-      total += 1;
-
-      const optionButtons = optionsContainer.querySelectorAll(".option");
-      optionButtons.forEach((b, i) => {
-        b.classList.remove("selected", "correct", "wrong");
-        if (i === currentJob.correctIndex) {
-          b.classList.add("correct");
+        function getAvailableJobs() {
+            return jobs.filter(job => !usedJobs.includes(job));
         }
-      });
 
-      if (index === currentJob.correctIndex) {
-        correct += 1;
-        feedbackEl.textContent = "Nice! That’s correct.";
-        feedbackEl.className = "feedback correct";
-      } else {
-        btn.classList.add("wrong");
-        feedbackEl.textContent = `Not quite. The correct answer was: ${currentJob.title}.`;
-        feedbackEl.className = "feedback wrong";
-      }
-
-      updateScoreText();
-    }
-
-    function revealAnswer() {
-      if (!currentJob) return;
-      const optionButtons = optionsContainer.querySelectorAll(".option");
-      optionButtons.forEach((b, i) => {
-        b.classList.remove("selected", "wrong");
-        if (i === currentJob.correctIndex) {
-          b.classList.add("correct");
+        function generateQuestion() {
+            answeredCurrentQuestion = false;
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const availableJobs = getAvailableJobs();
+            
+            if (availableJobs.length < 4) {
+                usedJobs = [];
+            }
+            
+            const shuffled = shuffleArray(availableJobs);
+            const questionJobs = shuffled.slice(0, 4);
+            
+            correctAnswer = questionJobs[Math.floor(Math.random() * 4)];
+            usedJobs.push(correctAnswer);
+            
+            document.getElementById('job-title').textContent = correctAnswer;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            const shuffledOptions = shuffleArray(questionJobs);
+            
+            shuffledOptions.forEach(job => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = job;
+                button.onclick = () => checkAnswer(job, button);
+                optionsContainer.appendChild(button);
+            });
+            
+            currentQuestion++;
+            document.getElementById('current-q').textContent = currentQuestion;
         }
-      });
-      feedbackEl.textContent = `Answer: ${currentJob.title}.`;
-      feedbackEl.className = "feedback correct";
-    }
 
-    newJobBtn.addEventListener("click", pickRandomJob);
-    revealBtn.addEventListener("click", revealAnswer);
+        function checkAnswer(selectedJob, button) {
+            if (answeredCurrentQuestion) return;
+            
+            answeredCurrentQuestion = true;
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+            
+            if (selectedJob === correctAnswer) {
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                button.classList.add('wrong');
+            }
+            
+            if (currentQuestion < totalQuestions) {
+                document.getElementById('next-btn').classList.remove('hidden');
+            } else {
+                setTimeout(endGame, 1500);
+            }
+        }
 
-    updateScoreText();
-  </script>
+        function endGame() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.remove('hidden');
+            document.getElementById('final-score').textContent = score + '/' + totalQuestions;
+            
+            let message = '';
+            if (score === totalQuestions) {
+                message = '🏆 Perfect score! You\'re a career expert!';
+            } else if (score >= 7) {
+                message = '🌟 Great job! You know your careers well!';
+            } else if (score >= 5) {
+                message = '👍 Good effort! Keep learning!';
+            } else {
+                message = '💪 Keep practicing! You\'ll do better next time!';
+            }
+            
+            document.getElementById('final-message').textContent = message;
+        }
+
+        document.getElementById('next-btn').addEventListener('click', generateQuestion);
+        document.getElementById('total-q').textContent = totalQuestions;
+        
+        generateQuestion();
+    </script>
 </body>
 </html>
